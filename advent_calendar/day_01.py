@@ -1,7 +1,7 @@
 import pandas as pd
 
-def extract():
-    data = pd.read_csv('data.csv', sep='\s\s\s', names=['left', 'right'])
+def extract(path):
+    data = pd.read_csv(path, sep='\\s\\s\\s', names=['left', 'right'], engine='python')
     data.reset_index(inplace=True, drop=True)
     return data
 
@@ -22,7 +22,7 @@ def similarity_score(data):
     return transformed_data['similarity'].sum()
 
 if __name__ == '__main__':
-    data = extract()
+    data = extract('data/day_01.csv')
     diff_score = diff_score(data)
     similarity_score = similarity_score(data)
     print(diff_score, similarity_score)
