@@ -47,64 +47,37 @@ def find_word_neighbors(grid, target_word: str):
                         match_count += 1
     return match_count
 
-def find_word_neighbors_x_shape(grid, target_word: str):
-    if grid is None:
-        return 0
-    
+def find_word_neighbors_x_shape(grid):
+    rows, cols = grid.shape
     match_count = 0
-    num_rows, num_cols = grid.shape
-    directions = [
-        (-1, -1),
-        (-1,  1),
-        (1,  -1),
-        (1,   1),
-    ]
-    word_length = len(target_word)
 
-    def in_bounds(row, col):
-        return 0 <= row < num_rows and 0 <= col < num_cols
+    def check_x_shape(grid, row, col):
+        
+        rows, cols = grid.shape
 
-    def search_x_shape(center_row, center_col):
-        for delta_row, delta_col in directions:
-            # Check forward direction
-            if all(
-                in_bounds(center_row + i * delta_row, center_col + i * delta_col) and
-                grid[center_row + i * delta_row, center_col + i * delta_col] == target_word[i]
-                for i in range(word_length)
-            ):
-                return True
+        if row - 1 < 0 or row + 1 >= rows or col - 1 < 0 or col + 1 >= cols:
+            return False
+
+        patterns = ["MAS", "SAM"]
+
+        l_diag = "".join([grid[row - 1][col - 1], grid[row][col], grid[row + 1][col + 1]])
+        r_diag = "".join([grid[row - 1][col + 1], grid[row][col], grid[row + 1][col - 1]])
+
+        if (l_diag in patterns and r_diag in patterns) or (
+            l_diag[::-1] in patterns and r_diag[::-1] in patterns
+        ):
+            return True
+
         return False
-
-    for row in range(num_rows):
-        for col in range(num_cols):
-            if grid[row, col] == target_word[0]:
-                if search_x_shape(row, col):
-                    match_count += 1
-
-    return match_count
+    for i in range(1, rows - 1):
+        for j in range(1, cols - 1):
+            if check_x_shape(grid, i, j):
+                match_count += 1
+    return match_count 
 
 if __name__ == '__main__':
-    data = load("../data/day_04.txt")
+    data = load("data/day_04.txt")
     xmas_count = find_word_neighbors(grid=data, target_word='XMAS')
-    x_mas_count = find_word_neighbors_x_shape(grid=data, target_word='MAS')
+    x_mas_count = find_word_neighbors_x_shape(grid=data)
     print(f"'XMAS' found {xmas_count} times")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
     print(f"'X-MAS' found {x_mas_count} times")
