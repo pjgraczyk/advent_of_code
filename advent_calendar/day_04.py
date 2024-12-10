@@ -1,3 +1,6 @@
+# Advent of Code 2024
+# Author: Przemysław Graczyk
+
 import numpy as np
 
 def load(path):
