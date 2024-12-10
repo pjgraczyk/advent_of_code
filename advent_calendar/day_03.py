@@ -1,3 +1,6 @@
+# Advent of Code 2024
+# Author: Przemysław Graczyk
+
 import re
 
 def load(path):
